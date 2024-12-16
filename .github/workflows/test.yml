@@ -1,0 +1,31 @@
+name: Node.js Selenium Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      chrome:
+        image: selenium/standalone-chrome
+        options: --shm-size 2g
+        ports:
+          - 4444:4444
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Selenium Tests
+        run: node src/cli/index.js chrome
